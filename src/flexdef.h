@@ -909,7 +909,7 @@ extern void lerrif PROTO ((const char *, int));
 extern void lerrsf PROTO ((const char *, const char *));
 
 /* Like lerrsf, but also exit after displaying message. */
-extern void lerrsf_fatal PROTO ((const char *, const char *));
+extern void lerrsf_fatal PROTO ((const char *, ...));
 
 /* Spit out a "#line" statement. */
 extern void line_directive_out PROTO ((FILE *, int));

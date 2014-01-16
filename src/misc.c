@@ -411,12 +411,15 @@ void lerrsf (msg, arg)
 
 /* lerrsf_fatal - as lerrsf, but call flexfatal */
 
-void lerrsf_fatal (msg, arg)
-	const char *msg, arg[];
+void lerrsf_fatal (const char *msg, ...)
 {
 	char    errmsg[MAXLINE];
+	va_list args;
+	va_start(args, msg);
 
-	snprintf (errmsg, sizeof(errmsg)-1, msg, arg);
+	vsnprintf (errmsg, sizeof(errmsg)-1, msg, args);
+	va_end(args);
+
 	errmsg[sizeof(errmsg)-1] = 0; /* ensure NULL termination */
 	flexfatal (errmsg);
 }
