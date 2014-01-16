@@ -35,7 +35,8 @@
 /* #define YYPARSE_PARAM scanner */
 /* #define YYLEX_PARAM   scanner */
 
-int yyerror(char* msg);
+int yyerror(char const* msg);
+extern int yylex();
 extern int testget_lineno(void);
 
 
@@ -89,7 +90,7 @@ line:
 
 %%
 
-int yyerror(char* msg) {
+int yyerror(char const* msg) {
     fprintf(stderr,"%s\n",msg);
     return 0;
 }

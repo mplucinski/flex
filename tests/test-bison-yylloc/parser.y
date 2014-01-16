@@ -36,6 +36,8 @@
 #define YYERROR_VERBOSE 1
 #define YYLEX_PARAM   scanner
 
+int yyerror(void* yylloc, void* scanner, char const* msg);
+extern int yylex();
 extern int testget_lineno(void*);
 
 
@@ -78,7 +80,7 @@ line:
         /* Check lineno. */
         if( $1 != @1.first_line || $1 != testget_lineno(scanner))
         {
-            yyerror("Parse failed: Line numbers do not match.");
+            yyerror(&yylloc, scanner, "Parse failed: Line numbers do not match.");
             YYABORT;
         }
 
@@ -89,7 +91,7 @@ line:
 
 %%
 
-int yyerror(void* scanner, char* msg) {
+int yyerror(void* yylloc, void* scanner, char const* msg) {
     fprintf(stderr,"%s\n",msg);
     return 0;
 }
