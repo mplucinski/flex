@@ -1679,6 +1679,10 @@ void readin ()
 				outn ("extern char yytext[];\n");
 		}
 		else {
+			outn("#ifdef yytext_ptr");
+			outn("#undef yytext_ptr");
+			outn("#endif");
+
 			if (reentrant) {
 				outn ("#define yytext_ptr yytext_r");
 			}
