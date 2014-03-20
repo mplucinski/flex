@@ -537,10 +537,8 @@ static int scanopt_err (s, opt_offset, is_short, err)
 {
 	const char *optname = "";
 	char    optchar[2];
-	const optspec_t *opt = NULL;
 
-	if (opt_offset >= 0)
-		opt = s->options + opt_offset;
+	(void)opt_offset;
 
 	if (!s->no_err_msg) {
 
