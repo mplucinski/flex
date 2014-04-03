@@ -107,13 +107,23 @@ char *alloca ();
 #define _(STRING) STRING
 #endif /* ENABLE_NLS */
 
-/* Always be prepared to generate an 8-bit scanner. */
-#define CSIZE 256
+/* Always be prepared to generate unicode scanner. */
+#define CSIZE 0x110000
 #define Char unsigned char
+
+/* Size for 8-bit scanner */
+#ifndef _8BIT_CSIZE
+#define _8BIT_CSIZE 256
+#endif
 
 /* Size of input alphabet - should be size of ASCII set. */
 #ifndef DEFAULT_CSIZE
 #define DEFAULT_CSIZE 128
+#endif
+
+/* Size of unicode alphabet */
+#ifndef UNICODE_CSIZE
+#define UNICODE_CSIZE 0x110000
 #endif
 
 #ifndef PROTO

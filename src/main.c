@@ -275,7 +275,7 @@ void check_options ()
 		if ((fulltbl || fullspd) && !useecs)
 			csize = DEFAULT_CSIZE;
 		else
-			csize = CSIZE;
+			csize = _8BIT_CSIZE;
 	}
 
 	if (interactive == unspecified) {
@@ -1260,7 +1260,7 @@ void flexinit (argc, argv)
 			break;
 
 		case OPT_8BIT:
-			csize = CSIZE;
+			csize = _8BIT_CSIZE;
 			break;
 
 		case OPT_ALIGN:
