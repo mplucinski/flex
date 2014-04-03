@@ -36,6 +36,7 @@
 #include "version.h"
 #include "options.h"
 #include "tables.h"
+#include <sys/resource.h>
 
 static char flex_version[] = FLEX_VERSION;
 
@@ -213,6 +214,9 @@ int main (argc, argv)
      int argc;
      char   *argv[];
 {
+    const rlim_t new_rl = 1024*1024*64;
+    struct rlimit rl;
+    int result;
 #if ENABLE_NLS
 #if HAVE_LOCALE_H
 	setlocale (LC_MESSAGES, "");
@@ -221,6 +225,17 @@ int main (argc, argv)
 	bindtextdomain (PACKAGE, LOCALEDIR);
 #endif
 #endif
+
+    result = getrlimit(RLIMIT_STACK, &rl);
+    if(result == 0) {
+        if(rl.rlim_cur < new_rl) {
+            rl.rlim_cur = new_rl;
+            result = setrlimit(RLIMIT_STACK, &rl);
+            if(result != 0)
+                flexerror(_("Could not enlarge stack size limit"));
+        }
+    } else
+        flexerror(_("Could not read stack size limit"));
 
 	return flex_main (argc, argv);
 }
