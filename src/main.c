@@ -1501,7 +1501,7 @@ void readin ()
 	static char yy_nostdinit[] =
 		"FILE *yyin = (FILE *) 0, *yyout = (FILE *) 0;";
 	static char character_type_uchar[] = "typedef unsigned char YY_CHAR;";
-	static char character_type_char[] = "typedef char YY_CHAR";
+	static char character_type_char[] = "typedef char YY_CHAR;";
 	static char character_defined[] = "#define YY_CHAR_DEFINED";
 
 	line_directive_out ((FILE *) 0, 1);
