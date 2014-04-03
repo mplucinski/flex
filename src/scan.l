@@ -384,6 +384,7 @@ M4QEND      "]]"
 	stack		ACTION_M4_IFDEF( "M4""_YY_STACK_USED", option_sense );
 	stdinit		do_stdinit = option_sense;
 	stdout		use_stdout = option_sense;
+    unicode     { csize = UNICODE_CSIZE; charset_enabled = true; }
     unistd      ACTION_IFDEF("YY_NO_UNISTD_H", ! option_sense);
 	unput		ACTION_M4_IFDEF("M4""_YY_NO_UNPUT", ! option_sense);
 	verbose		printstats = option_sense;
