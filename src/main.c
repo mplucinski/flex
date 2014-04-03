@@ -1618,6 +1618,10 @@ void readin ()
 		//outn ("\n#define YY_USES_REJECT");
     }
 
+    if(charset_enabled) {
+        out_m4_define( "M4_YY_USES_CHARSET", NULL);
+    }
+
 	if (!do_yywrap) {
 		if (!C_plus_plus) {
 			 if (reentrant)
