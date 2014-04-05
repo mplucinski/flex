@@ -412,6 +412,12 @@ void check_options ()
         char_header_file = fopen(headercharfilename, "w");
         fprintf(char_header_file, "#pragma once\n");
         fprintf(char_header_file, "\n");
+        fprintf(char_header_file, "#ifndef __STDC_LIMIT_MACROS\n");
+        fprintf(char_header_file, "#define __STDC_LIMIT_MACROS 1\n");
+        fprintf(char_header_file, "#endif\n");
+        fprintf(char_header_file, "\n");
+        fprintf(char_header_file, "#include <stdint.h>\n");
+        fprintf(char_header_file, "\n");
         fflush(char_header_file);
 
         buf_strappend(&userdef_buf, "#include \"");
@@ -1515,8 +1521,11 @@ void readin ()
 	static char yy_stdinit[] = "FILE *yyin = stdin, *yyout = stdout;";
 	static char yy_nostdinit[] =
 		"FILE *yyin = (FILE *) 0, *yyout = (FILE *) 0;";
-	static char character_type_uchar[] = "typedef unsigned char YY_CHAR;";
-	static char character_type_char[] = "typedef char YY_CHAR;";
+	static char charater_type_unknown[] = "#error Charater type has not been set properly";
+	static char character_type_uint32[] = "typedef uint32_t YY_CHAR;";
+	static char character_type_uint16[] = "typedef uint16_t YY_CHAR;";
+	static char character_type_uint8[] = "typedef uint8_t YY_CHAR;";
+	static char character_type_int8[] = "typedef int8_t YY_CHAR;";
 	static char character_defined[] = "#define YY_CHAR_DEFINED";
 
 	line_directive_out ((FILE *) 0, 1);
@@ -1652,21 +1661,27 @@ void readin ()
 
 	OUT_BEGIN_CODE ();
 	outn("#ifndef YY_CHAR_DEFINED");
-	if (csize == 256) {
-		outn (character_type_uchar);
-		if(char_header_file)
-			fprintf(char_header_file, "%s\n", character_type_uchar);
-	} else {
-		outn (character_type_char);
-		if(char_header_file)
-			fprintf(char_header_file, "%s\n", character_type_char);
-	}
+	char *character_type_definition = charater_type_unknown;
+	if(csize > 0x10000)
+		character_type_definition = character_type_uint32;
+	else if(csize > 0x100)
+		character_type_definition = character_type_uint16;
+	else if(csize > 0x80)
+		character_type_definition = character_type_uint8;
+	else
+		character_type_definition = character_type_int8;
+
+	outn(character_type_definition);
 	outn(character_defined);
-	outn("#endif");
+
 	if(char_header_file) {
+		fprintf(char_header_file, "\n");
+		fprintf(char_header_file, "%s\n", character_type_definition);
 		fprintf(char_header_file, "%s\n", character_defined);
 		fflush(char_header_file);
 	}
+
+	outn("#endif");
 	OUT_END_CODE ();
 
 	if (C_plus_plus) {
