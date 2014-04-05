@@ -24,6 +24,7 @@
 %{
 /* This test is for correctness of parsing unicode input. */
 
+#define YY_READ_BUF_SIZE 8
 #include <stdio.h>
 #include <stdlib.h>
 #include "config.h"
