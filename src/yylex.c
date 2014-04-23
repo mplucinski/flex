@@ -152,7 +152,7 @@ int     yylex ()
 			default:
 				if (!isascii (yylval) || !isprint (yylval))
 					fprintf (stderr,
-						 "\\%.3o",
+						 "\\x%02x",
 						 (unsigned int) yylval);
 				else
 					(void) putc (yylval, stderr);
