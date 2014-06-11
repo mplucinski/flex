@@ -626,6 +626,8 @@ void ntod ()
 
 		sympartition (dset, dsize, symlist, duplist);
 
+		int last_newds = 0;
+		int dots = 0;
 		for (sym = 1; sym <= numecs; ++sym) {
 			if (symlist[sym]) {
 				symlist[sym] = 0;
@@ -658,10 +660,18 @@ void ntod ()
 
 					state[sym] = newds;
 
-					if (trace)
-						fprintf (stderr,
-							 "\t%d\t%d\n", sym,
-							 newds);
+					if (trace) {
+						if (newds != last_newds) {
+							fprintf (stderr,
+								"\t%d\t%d\n", sym,
+							 	newds);
+							last_newds = newds;
+							dots = 0;
+						} else if(!dots) {
+							fprintf (stderr, "\t(... same as above ...)\n");
+							dots = !dots;
+						}
+					}
 
 					targfreq[++targptr] = 1;
 					targstate[targptr] = newds;
@@ -676,10 +686,18 @@ void ntod ()
 					targ = state[duplist[sym]];
 					state[sym] = targ;
 
-					if (trace)
-						fprintf (stderr,
-							 "\t%d\t%d\n", sym,
-							 targ);
+					if (trace) {
+						if (targ != last_newds) {
+							fprintf (stderr,
+								 "\t%d\t%d\n", sym,
+								 targ);
+							last_newds = targ;
+							dots = 0;
+						} else if(!dots) {
+							fprintf (stderr, "\t(... same as above ...)\n");
+							dots = !dots;
+						}
+					}
 
 					/* Update frequency count for
 					 * destination state.
