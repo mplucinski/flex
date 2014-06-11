@@ -1897,8 +1897,14 @@ void make_tables ()
 	if (!C_plus_plus) {
 		if (use_read) {
 			outn ("\terrno=0; \\");
-			outn ("\twhile ( (result = read( fileno(yyin), (char *) buf, max_size )) < 0 ) \\");
+
+			outn ("\tfor(;;) \\");
 			outn ("\t{ \\");
+			outn ("\t\tssize_t r = read(fileno(yyin), buf, max_size); \\");
+			outn ("\t\tif(r >= 0) { \\");
+			outn ("\t\t\tresult = (size_t)r; \\");
+			outn ("\t\t\tbreak; \\");
+			outn ("\t\t} \\");
 			outn ("\t\tif( errno != EINTR) \\");
 			outn ("\t\t{ \\");
 			outn ("\t\t\tYY_FATAL_ERROR( \"input in flex scanner failed\" ); \\");
