@@ -761,7 +761,7 @@ singleton	:  singleton '*'
 			{
 			++rulelen;
 
-			if ($1 == nlch)
+			if ((Char)$1 == nlch)
 				rule_has_nl[num_rules] = true;
 
             if (sf_case_ins() && has_case($1))
@@ -935,7 +935,7 @@ ccl_expr:
 		
 string		:  string CHAR
 			{
-			if ( $2 == nlch )
+			if ((Char)$2 == nlch )
 				rule_has_nl[num_rules] = true;
 
 			++rulelen;

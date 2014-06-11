@@ -96,6 +96,8 @@ char *alloca ();
 #endif
 #include <stdint.h>
 
+#include <uchar.h>
+
 /* We use gettext. So, when we write strings which should be translated, we mark them with _() */
 #ifdef ENABLE_NLS
 #ifdef HAVE_LOCALE_H
@@ -109,7 +111,7 @@ char *alloca ();
 
 /* Always be prepared to generate unicode scanner. */
 #define CSIZE 0x110000
-#define Char unsigned char
+#define Char char32_t
 
 /* Size for 8-bit scanner */
 #ifndef _8BIT_CSIZE
@@ -524,7 +526,7 @@ extern int *firstst, *lastst, *finalst, *transchar, *trans1, *trans2;
 extern int *accptnum, *assoc_rule, *state_type;
 extern int *rule_type, *rule_linenum, *rule_useful;
 extern bool *rule_has_nl, *ccl_has_nl;
-extern int nlch;
+extern Char nlch;
 
 /* Different types of states; values are useful as masks, as well, for
  * routines like check_trailing_context().
@@ -750,7 +752,7 @@ extern int yylval;
 
 /* from file ccl.c */
 
-extern void ccladd PROTO ((int, int));	/* add a single character to a ccl */
+extern void ccladd PROTO ((int, Char));	/* add a single character to a ccl */
 extern int cclinit PROTO ((void));	/* make an empty ccl */
 extern void cclnegate PROTO ((int));	/* negate a ccl */
 extern int ccl_set_diff (int a, int b); /* set difference of two ccls. */

@@ -35,7 +35,7 @@
 
 /* return true if the chr is in the ccl. Takes negation into account. */
 static bool
-ccl_contains (const int cclp, const int ch)
+ccl_contains (const int cclp, const Char ch)
 {
 	int     ind, len, i;
 
@@ -54,7 +54,7 @@ ccl_contains (const int cclp, const int ch)
 
 void    ccladd (cclp, ch)
      int     cclp;
-     int     ch;
+     Char     ch;
 {
 	int     ind, len, newpos, i;
 

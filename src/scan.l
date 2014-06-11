@@ -972,7 +972,12 @@ nmstr[yyleng - 2 - end_is_ws] = '\0';  /* chop trailing brace */
 			}
 
 <SECT2,QUOTE,FIRSTCCL,CCL>{ESCSEQ}	{
-			yylval = myesc( (Char *) yytext );
+			Char *buffer = allocate_Character_array(yyleng+1);
+			if(!buffer)
+				flexerror("Could not allocate buffer");
+			yycharset_convert_utf8(yytext, yyleng, buffer, yyleng+1, NULL);
+			yylval = myesc(buffer);
+			flex_free(buffer);
 
 			if ( YY_START == FIRSTCCL )
 				BEGIN(CCL);

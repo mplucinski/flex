@@ -106,7 +106,7 @@ char  **input_files;
 int     num_input_files;
 jmp_buf flex_main_jmp_buf;
 bool   *rule_has_nl, *ccl_has_nl;
-int     nlch = '\n';
+Char    nlch = '\n';
 bool    ansi_func_defs, ansi_func_protos, charset_enabled = false;
 
 bool    tablesext, tablesverify, gentables;
