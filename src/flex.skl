@@ -627,6 +627,9 @@ struct yy_buffer_state
 	int yy_fill_buffer;
 
 	int yy_buffer_status;
+
+	char *yy_input_buffer;
+	size_t yy_input_buffer_length;
 m4_ifdef( [[M4_YY_NOT_IN_HEADER]],
 [[
 #define YY_BUFFER_NEW 0
@@ -1665,17 +1668,23 @@ m4_ifdef( [[M4_YY_NOT_IN_HEADER]],
 [[
 m4_ifdef( [[M4_YY_USES_CHARSET]],
 [[
+
+m4preproc_include(`utf8.h')
+
 /* yycharset_convert - convert incoming data from arbitrary
  *    charset into internal representation
  */
-static size_t yycharset_convert YYFARGS4(
+static size_t yycharset_convert YYFARGS5(
         char*, source, size_t, source_bytes,
-        YY_CHAR*, target, size_t, target_length) {
+        YY_CHAR*, target, size_t, target_length,
+        size_t*, converted_bytes) {
     M4_YY_DECL_GUTS_VAR();
     if(strcmp(yycharset, "ASCII")==0) {
         if(target_length < source_bytes)
             YY_FATAL_ERROR("Too small buffer");
         strncpy((char*)target, source, source_bytes);
+        if(converted_bytes)
+            *converted_bytes = source_bytes;
         return source_bytes;
     } else if(strcmp(yycharset, "EBCDIC")==0) {
         static char ebcdic_cnv[256] = {
@@ -1717,7 +1726,13 @@ static size_t yycharset_convert YYFARGS4(
             YY_FATAL_ERROR("Too small buffer");
         for(size_t i = 0; i < source_bytes; ++i)
             target[i] = ebcdic_cnv[ (unsigned int)(unsigned char)source[i] ];
+        if(converted_bytes)
+            *converted_bytes = source_bytes;
         return source_bytes;
+    } else if(strcmp(yycharset, "UTF-8")==0) {
+        return yycharset_convert_utf8(source, source_bytes,
+                target, target_length, converted_bytes
+                M4_YY_CALL_LAST_ARG);
     } else {
         char msg[256];
         snprintf(msg, sizeof(msg), "Unsupported charset: %s", yycharset);
@@ -1844,15 +1859,23 @@ m4_ifdef( [[M4_YY_USES_CHARSET]],
         if(yycharset) {
             const size_t max_size = YY_READ_BUF_SIZE * sizeof(YY_CHAR);
             char buffer[max_size];
+            memcpy(buffer, YY_CURRENT_BUFFER_LVALUE->yy_input_buffer, YY_CURRENT_BUFFER_LVALUE->yy_input_buffer_length);
             size_t read_bytes, converted_characters;
-            YY_INPUT( (buffer), (read_bytes), (max_size) );
+            YY_INPUT( (&buffer[YY_CURRENT_BUFFER_LVALUE->yy_input_buffer_length]), (read_bytes), (max_size-YY_CURRENT_BUFFER_LVALUE->yy_input_buffer_length) );
+            size_t converted_bytes = 0;
             converted_characters = yycharset_convert(
-                buffer, read_bytes,
+                buffer, YY_CURRENT_BUFFER_LVALUE->yy_input_buffer_length+read_bytes,
                 &YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[number_to_move],
-                num_to_read M4_YY_CALL_LAST_ARG);
+                num_to_read,
+                &converted_bytes M4_YY_CALL_LAST_ARG);
             if(converted_characters == 0 && read_bytes != 0)
                 YY_FATAL_ERROR("Could not convert input characters");
             YY_G(yy_n_chars) = converted_characters;
+
+            /* store left bytes in yy_input_buffer */
+            YY_CURRENT_BUFFER_LVALUE->yy_input_buffer_length += read_bytes-converted_bytes;
+            YY_CURRENT_BUFFER_LVALUE->yy_input_buffer = (char*)yyrealloc((void*) YY_CURRENT_BUFFER_LVALUE->yy_input_buffer, YY_CURRENT_BUFFER_LVALUE->yy_input_buffer_length M4_YY_CALL_LAST_ARG);
+            memcpy(YY_CURRENT_BUFFER_LVALUE->yy_input_buffer, &buffer[converted_bytes], YY_CURRENT_BUFFER_LVALUE->yy_input_buffer_length);
         } else
 ]])
 		YY_INPUT( (&YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[number_to_move]),
@@ -2275,6 +2298,9 @@ m4_ifdef( [[M4_YY_ALWAYS_INTERACTIVE]],
 	b->yy_is_interactive = 0;
 %endif
 	errno = oerrno;
+
+	b->yy_input_buffer = NULL;
+	b->yy_input_buffer_length = 0;
 }
 
 /** Discard all buffered characters. On the next scan, YY_INPUT will be called.
