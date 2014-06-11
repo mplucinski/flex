@@ -9,7 +9,7 @@ add_custom_command(
     OUTPUT scanner_full.c
     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/scanner.l
     COMMAND ${SHELL}
-    ARGS -c "${TEST_ENV_VARS} $<TARGET_FILE:flex> --full --trace -o scanner_full.c ${CMAKE_CURRENT_SOURCE_DIR}/scanner.l"
+    ARGS -c "${TEST_ENV_VARS} $<TARGET_FILE:flex> --full -o scanner_full.c ${CMAKE_CURRENT_SOURCE_DIR}/scanner.l"
 )
 
 add_executable(test-unicode-basic-r
