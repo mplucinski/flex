@@ -33,7 +33,6 @@
 
 #include "flexdef.h"
 
-
 /* declare functions that have forward references */
 
 int dupmachine PROTO ((int));
@@ -103,6 +102,8 @@ void    dumpnfa (state1)
 		 _
 		 ("\n\n********** beginning dump of nfa with start state %d\n"),
 		 state1);
+	fprintf (stderr,
+		"state identifier   char     tr1   tr2  acceptnum\n");
 
 	/* We probably should loop starting at firstst[state1] and going to
 	 * lastst[state1], but they're not maintained properly when we "or"
@@ -119,7 +120,7 @@ void    dumpnfa (state1)
 		tsp2 = trans2[ns];
 		anum = accptnum[ns];
 
-		fprintf (stderr, "%3d:  %4d, %4d", sym, tsp1, tsp2);
+		fprintf (stderr, "%8d:  %4d, %4d", sym, tsp1, tsp2);
 
 		if (anum != NIL)
 			fprintf (stderr, "  [%d]", anum);
