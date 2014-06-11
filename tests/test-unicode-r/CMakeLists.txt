@@ -11,5 +11,5 @@ add_executable(test-unicode-r
 
 add_test(
     NAME test-unicode-r
-    COMMAND ${SHELL} -c "./test-unicode-nr < ${CMAKE_CURRENT_SOURCE_DIR}/test.input | diff -a - ${CMAKE_CURRENT_SOURCE_DIR}/test.output"
+    COMMAND ${SHELL} -c "./test-unicode-r < ${CMAKE_CURRENT_SOURCE_DIR}/test.input | diff -a - ${CMAKE_CURRENT_SOURCE_DIR}/test.output"
 )
