@@ -1177,12 +1177,14 @@ m4_ifdef( [[M4_YY_NOT_IN_HEADER]],
  */
 #ifndef YY_INPUT
 #define YY_INPUT(buf,result,max_size) \
+do { \
 %% [5.0] fread()/read() definition of YY_INPUT goes here unless we're doing C++ \
-\
 %if-c++-only C++ definition \
 	if ( (result = LexerInput( (char *) buf, max_size )) < 0 ) \
-		YY_FATAL_ERROR( "input in flex scanner failed" );
-%endif
+		YY_FATAL_ERROR( "input in flex scanner failed" ); \
+%endif \
+} while(0) \
+\
 
 #endif
 ]])
