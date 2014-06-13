@@ -46,12 +46,16 @@ configure_file(config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 set(FLEX_CMAKE_BINARY_DIR "${CMAKE_BINARY_DIR}")
 include_directories("${FLEX_CMAKE_BINARY_DIR}")
 
+# this is used to access FlexLexer.h
+set(FLEX_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
+
 # include directories
 add_subdirectory(lib)
 add_subdirectory(src)
 add_subdirectory(doc)
 add_subdirectory(po)
 add_subdirectory(tests)
+
 
 # install scripts
 install(FILES AUTHORS COPYING NEWS ONEWS README

@@ -52,7 +52,7 @@
     yyscan_t  scanner;
     FILE * fp;
     yytext[yyleng-1]='\0';
-    if((fp=fopen(yytext,"r"))==NULL) {
+    if((fp=fopen((char*)yytext,"r"))==NULL) {
         fprintf(stderr,"*** Error: Could not open include file \"%s\".\n",
             yytext);
         yyterminate();

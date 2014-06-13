@@ -125,7 +125,7 @@ foreach(TEST_DIR ${TEST_DIRS})
 
 			add_executable(${TEST_BINARY} ${TEST_SRCS})
 			set_target_properties(${TEST_BINARY}
-				PROPERTIES INCLUDE_DIRECTORIES "$<TARGET_FILE_DIR:flex>;${FLEX_CMAKE_BINARY_DIR};${TEST_BINARY_DIR}"
+				PROPERTIES INCLUDE_DIRECTORIES "$<TARGET_FILE_DIR:flex>;${FLEX_SOURCE_DIR};${CMAKE_CURRENT_SOURCE_DIR};${FLEX_CMAKE_BINARY_DIR};${TEST_BINARY_DIR}"
 			)
 
 			set(TEST_INPUT_FILE "${TEST_SOURCE_DIR}/test.input")
@@ -148,3 +148,6 @@ foreach(TEST_DIR ${TEST_DIRS})
 		endif(EXISTS "${TEST_DIR}/CMakeLists.txt")
 	endif()
 endforeach()
+
+add_executable(test_strutils test_strutils.c)
+add_test(test_strutils test_strutils)

@@ -45,7 +45,7 @@ main ( int argc, char** argv )
     testget_out(scanner);
 
     while(testlex(scanner)) {
-        char * text;
+        YY_CHAR * text;
         int line;
         line = testget_lineno(scanner);
         text = testget_text(scanner);
