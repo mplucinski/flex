@@ -16,6 +16,17 @@ include(CPack)
 # options
 option(ENABLE_NLS "Enables Native Language Support" ON)
 
+# below flags are common for C and C++
+set(COMMON_FLAGS "-Werror -Wall -Wextra -pedantic-errors -D_POSIX_C_SOURCE=1")
+
+# those are extra flags that would be great to completely remove some day
+set(COMMON_FLAGS "${COMMON_FLAGS} -Wno-unused-label")
+
+# options specific for C and C++ sources
+set(CMAKE_C_FLAGS "-std=c11 ${COMMON_FLAGS} ${CMAKE_C_FLAGS}")
+set(CMAKE_CXX_FLAGS "-std=c++11 ${COMMON_FLAGS} ${CMAKE_CXX_FLAGS}")
+
+
 # prepare config.h
 find_file(HAVE_ALLOCA_H NAMES "alloca.h")
 find_file(HAVE_ASSERT_H NAMES "assert.h")
