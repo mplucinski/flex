@@ -72,14 +72,18 @@ static size_t yycharset_convert_utf8 YYFARGS5(
     size_t i = 0, j = 0;
 
 #ifdef TRACE_UTF8
-    fprintf(stderr, "Converting %d bytes\n", (int)source_bytes);
+    fprintf(stderr, "Converting %d bytes (to up to %d characters)\n", (int)source_bytes, (int)target_length);
     for(size_t iii = 0; iii < source_bytes; ++iii)
         fprintf(stderr, "      %d: 0x%02x\n", (int)iii, (unsigned int)(unsigned char)source[iii]);
 #endif
 
     for(; i < source_bytes;) {
-        if(j >= target_length)
-            YY_FATAL_ERROR("Target buffer too small");
+        if(j >= target_length) {
+#ifdef TRACE_UTF8
+            fprintf(stderr, "Target buffer too small\n");
+#endif
+            break;
+        }
 
         uint8_t byte = source[i];
         if(byte >= 0x80 && sizeof(YY_CHAR) < 4)
