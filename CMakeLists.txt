@@ -16,6 +16,27 @@ include(CPack)
 # options
 option(ENABLE_NLS "Enables Native Language Support" ON)
 
+option(TRACE_CCL "Trace character classes functions" OFF)
+option(TRACE_DFA "Trace DFA functions" OFF)
+option(TRACE_NFA "Trace NFA functions" OFF)
+option(TRACE_UTF8 "Trace UTF8 functions" OFF)
+
+if(TRACE_CCL)
+	add_definitions(-DTRACE_CCL)
+endif()
+
+if(TRACE_DFA)
+	add_definitions(-DTRACE_DFA)
+endif()
+
+if(TRACE_NFA)
+	add_definitions(-DTRACE_NFA)
+endif()
+
+if(TRACE_UTF8)
+	add_definitions(-DTRACE_UTF8)
+endif()
+
 # below flags are common for C and C++
 set(COMMON_FLAGS "-Werror -Wall -Wextra -pedantic-errors -D_POSIX_C_SOURCE=1")
 

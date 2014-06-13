@@ -827,6 +827,13 @@ int snstods (sns, numstates, accset, nacc, hashval, newds_addr)
 	register int i, j;
 	int     newds, *oldsns;
 
+#ifdef TRACE_DFA
+	fprintf(stderr, "snstods(sns = %p, numstates = %i, accset = %p, "
+		"nacc = %i, hashval = %i, newds_addr = %p)\n", (void*)sns, numstates,
+		(void*)accset, nacc, hashval, (void*)newds_addr);
+	fprintf(stderr, "lastdfa == %d, num_rules == %d\n", lastdfa, num_rules);
+#endif
+
 	for (i = 1; i <= lastdfa; ++i)
 		if (hashval == dhash[i]) {
 			if (numstates == dfasiz[i]) {
@@ -907,6 +914,9 @@ int snstods (sns, numstates, accset, nacc, hashval, newds_addr)
 				/* Who knows, perhaps a REJECT can yield
 				 * this rule.
 				 */
+#ifdef TRACE_DFA
+				fprintf(stderr, "Setting rule accset[%d] == %d to useful because of reject possibility\n", i, accset[i]);
+#endif
 				rule_useful[accset[i]] = true;
 		}
 
@@ -925,8 +935,12 @@ int snstods (sns, numstates, accset, nacc, hashval, newds_addr)
 
 		dfaacc[newds].dfaacc_state = j;
 
-		if (j <= num_rules)
+		if (j <= num_rules) {
+#ifdef TRACE_DFA
+			fprintf(stderr, "Setting rule %d to useful\n", j);
+#endif
 			rule_useful[j] = true;
+		}
 	}
 
 	*newds_addr = newds;

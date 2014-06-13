@@ -603,6 +603,10 @@ int     mkrep (mach, lb, ub)
 int     mkstate (sym)
      int     sym;
 {
+#ifdef TRACE_NFA
+	fprintf(stderr, ">> mkstate(%d) <<", sym);
+#endif
+
 	if (++lastnfa >= current_mns) {
 		if ((current_mns += MNS_INCREMENT) >= maximum_mns)
 			lerrif (_

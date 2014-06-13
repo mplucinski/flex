@@ -57,6 +57,9 @@ void    ccladd (cclp, ch)
      Char     ch;
 {
 	int     ind, len, newpos, i;
+#ifdef TRACE_CCL
+    fprintf(stderr, "ccladd(cclp = %i, ch = %i (0x%02x))\n", cclp, ch, (unsigned int)ch);
+#endif
 
 	check_char (ch);
 
@@ -86,6 +89,10 @@ void    ccladd (cclp, ch)
 
 	ccllen[cclp] = len + 1;
 	ccltbl[newpos] = ch;
+#ifdef TRACE_CCL
+    fprintf(stderr, "ccllen[%i] = %i\n", cclp, ccllen[cclp]);
+    fprintf(stderr, "ccltbl[%i] = %i\n", newpos, ccltbl[newpos]);
+#endif
 }
 
 /* dump_cclp - same thing as list_character_set, but for cclps.  */
