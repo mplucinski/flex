@@ -395,6 +395,7 @@ char *alloca ();
  * yymore_really_used - whether to treat yymore() as really used, regardless
  *   of what we think based on references to it in the user's actions.
  * reject_really_used - same for REJECT
+ * charset_enabled - true if charset interface has been enabled
  */
 
 extern int printstats, syntaxerror, eofseen, ddebug, trace, nowarn,
@@ -409,6 +410,7 @@ extern int csize;
 extern int yymore_used, reject, real_reject, continued_action, in_rule;
 
 extern int yymore_really_used, reject_really_used;
+extern bool charset_enabled;
 
 
 /* Variables used in the flex input routines:

@@ -349,6 +349,7 @@ M4QEND      "]]"
 	"c++"		C_plus_plus = option_sense;
 	caseful|case-sensitive		sf_set_case_ins(!option_sense);
 	caseless|case-insensitive	sf_set_case_ins(option_sense);
+	charset		charset_enabled = true;
 	debug		ddebug = option_sense;
 	default		spprdflt = ! option_sense;
 	ecs		useecs = option_sense;

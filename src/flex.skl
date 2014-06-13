@@ -77,6 +77,7 @@ m4_ifelse(M4_YY_PREFIX,yy,,
 #define yyalloc M4_YY_PREFIX[[alloc]]
 #define yyrealloc M4_YY_PREFIX[[realloc]]
 #define yyfree M4_YY_PREFIX[[free]]
+#define yycharset M4_YY_PREFIX[[charset]]
 )
 %endif
 %endif
@@ -152,6 +153,8 @@ m4preproc_define(`M4_GEN_PREFIX',
     [[
         M4_GEN_PREFIX(`get_column')
         M4_GEN_PREFIX(`set_column')
+        M4_GEN_PREFIX(`get_charset')
+        M4_GEN_PREFIX(`set_charset')
     ]])
     M4_GEN_PREFIX(`wrap')
 %endif
@@ -330,6 +333,7 @@ m4_define( [[M4_YY_DOC_PARAM]], [[@param yyscanner The scanner object.]])
 #define yytext YY_G(yytext_r)
 #define yylineno (YY_CURRENT_BUFFER_LVALUE->yy_bs_lineno)
 #define yycolumn (YY_CURRENT_BUFFER_LVALUE->yy_bs_column)
+#define yycharset YY_G(yycharset_r)
 #define yy_flex_debug YY_G(yy_flex_debug_r)
 
 m4_define( [[M4_YY_INCR_LINENO]],
@@ -487,6 +491,7 @@ extern yy_size_t yyleng;
 %if-c-only
 %if-not-reentrant
 extern FILE *yyin, *yyout;
+char *yycharset;
 %endif
 %endif
 
@@ -834,6 +839,7 @@ struct yyguts_t
     YY_CHAR yy_hold_char;
     yy_size_t yy_n_chars;
     yy_size_t yyleng_r;
+    char *yycharset_r; /** current charset name */
     YY_CHAR *yy_c_buf_p;
     int yy_init;
     int yy_start;
@@ -1001,6 +1007,22 @@ m4_ifdef( [[M4_YY_REENTRANT]],
 m4_ifdef( [[M4_YY_NO_SET_COLUMN]],,
 [[
 void yyset_column M4_YY_PARAMS( int column_no M4_YY_PROTO_LAST_ARG );
+]])
+]])
+
+m4_ifdef( [[M4_YY_REENTRANT]],
+[[
+m4_ifdef( [[M4_YY_NO_GET_CHARSET]],,
+[[
+char *yyget_charset M4_YY_PARAMS( M4_YY_PROTO_ONLY_ARG );
+]])
+]])
+
+m4_ifdef( [[M4_YY_REENTRANT]],
+[[
+m4_ifdef( [[M4_YY_NO_SET_CHARSET]],,
+[[
+void yyset_charset M4_YY_PARAMS( char *charset M4_YY_PROTO_LAST_ARG );
 ]])
 ]])
 
@@ -2589,6 +2611,27 @@ int yyget_column  YYFARGS0(void)
 ]])
 ]])
 
+m4_ifdef( [[M4_YY_REENTRANT]],
+[[
+m4_ifdef( [[M4_YY_NO_GET_CHARSET]],,
+[[
+/** Get the currently set charset name
+ * M4_YY_DOC_PARAM
+ */
+char *yyget_charset  YYFARGS0(void)
+{
+    M4_YY_DECL_GUTS_VAR();
+
+    m4_ifdef( [[M4_YY_REENTRANT]],
+    [[
+        if (! YY_CURRENT_BUFFER)
+            return 0;
+    ]])
+    return yycharset;
+}
+]])
+]])
+
 m4_ifdef( [[M4_YY_NO_GET_IN]],,
 [[
 /** Get the input stream.
@@ -2691,6 +2734,23 @@ void yyset_column YYFARGS1( int , column_no)
            YY_FATAL_ERROR( "yyset_column called with no buffer" );
     ]])
     yycolumn = column_no;
+}
+]])
+]])
+
+m4_ifdef( [[M4_YY_REENTRANT]],
+[[
+m4_ifdef( [[M4_YY_NO_SET_CHARSET]],,
+[[
+/** Set the current charset name
+ * @param charset
+ * M4_YY_DOC_PARAM
+ */
+void yyset_charset YYFARGS1( char*, charset)
+{
+    M4_YY_DECL_GUTS_VAR();
+
+    yycharset = charset;
 }
 ]])
 ]])
