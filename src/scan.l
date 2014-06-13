@@ -34,6 +34,8 @@
 
 #include "flexdef.h"
 #include "parse.h"
+#define FLEX_UTF8_NO_SKELETON
+#include "utf8.h"
 extern bool tablesverify, tablesext;
 extern int trlcontxt; /* Set in  parse.y for each rule. */
 extern const char *escaped_qstart, *escaped_qend;
@@ -62,8 +64,11 @@ extern const char *escaped_qstart, *escaped_qend;
 	int flexscan()
 
 #define RETURNCHAR \
-	yylval = (unsigned char) yytext[0]; \
-	return CHAR;
+    do { \
+        yylval = 0; \
+        yycharset_convert_utf8(yytext, yyleng, (char32_t*)&yylval, 1, NULL); \
+        return CHAR; \
+    } while(0); \
 
 #define RETURNNAME \
 	if(yyleng < MAXLINE) \
@@ -105,6 +110,23 @@ extern const char *escaped_qstart, *escaped_qend;
 %x GROUP_MINUS_PARAMS
 %x EXTENDED_COMMENT
 %x COMMENT_DISCARD
+
+UTF8_CONT	[\x80-\xBF]
+UTF8_ST_SEQ1	[\x00-\x7F]
+UTF8_ST_SEQ2	[\xC2-\xDF]
+UTF8_ST_SEQ3	[\xE0-\xEF]
+UTF8_ST_SEQ4	[\xF0-\xF4]
+
+UTF8_SEQ1	({UTF8_ST_SEQ1})
+UTF8_SEQ2	({UTF8_ST_SEQ2}{UTF8_CONT})
+UTF8_SEQ3	({UTF8_ST_SEQ3}{UTF8_CONT}{UTF8_CONT})
+UTF8_SEQ4	({UTF8_ST_SEQ4}{UTF8_CONT}{UTF8_CONT}{UTF8_CONT})
+
+UTF8		({UTF8_SEQ1}|{UTF8_SEQ2}|{UTF8_SEQ3}|{UTF8_SEQ4})
+
+UTF8_NOT_LF	(([\x00-\x09\x0B-\x7F])|{UTF8_SEQ2}|{UTF8_SEQ3}|{UTF8_SEQ4})
+UTF8_NOT_QUOTE_LF	(([\x00-\x09\x0B-\x21\x23-\x7F])|{UTF8_SEQ2}|{UTF8_SEQ3}|{UTF8_SEQ4})
+UTF8_NOT_CLOSEBRACKET_LF	(([\x00-\x09\x0B-\x5C\x5E-\x7F])|{UTF8_SEQ2}|{UTF8_SEQ3}|{UTF8_SEQ4})
 
 WS		[[:blank:]]+
 OPTWS		[[:blank:]]*
@@ -744,7 +766,7 @@ nmstr[yyleng - 2 - end_is_ws] = '\0';  /* chop trailing brace */
     ")"         sf_pop(); return ')';
 
 	[/|*+?.(){}]	return (unsigned char) yytext[0];
-	.		RETURNCHAR;
+	{UTF8_NOT_LF}	RETURNCHAR;
 }
 
 
@@ -764,7 +786,7 @@ nmstr[yyleng - 2 - end_is_ws] = '\0';  /* chop trailing brace */
 
 
 <QUOTE>{
-	[^"\n]		RETURNCHAR;
+	{UTF8_NOT_QUOTE_LF}	RETURNCHAR;
 	\"		BEGIN(SECT2); return '"';
 
 	{NL}		{
@@ -792,14 +814,14 @@ nmstr[yyleng - 2 - end_is_ws] = '\0';  /* chop trailing brace */
 <FIRSTCCL>{
 	"^"/[^-\]\n]	BEGIN(CCL); return '^';
 	"^"/("-"|"]")	return '^';
-	.		BEGIN(CCL); RETURNCHAR;
+	{UTF8_NOT_LF}	BEGIN(CCL); RETURNCHAR;
 }
 
 <CCL>{
-	-/[^\]\n]	return '-';
-	[^\]\n]		RETURNCHAR;
+	-/{UTF8_NOT_CLOSEBRACKET_LF}	return '-';
+	{UTF8_NOT_CLOSEBRACKET_LF}	RETURNCHAR;
 	"]"		BEGIN(SECT2); return ']';
-	.|{NL}		{
+	{UTF8}		{
 			synerr( _( "bad character class" ) );
 			BEGIN(SECT2);
 			return ']';
@@ -967,7 +989,14 @@ nmstr[yyleng - 2 - end_is_ws] = '\0';  /* chop trailing brace */
 	<<EOF>>		sectnum = 0; yyterminate();
 }
 
-<*>.|\n			format_synerr( _( "bad character: %s" ), yytext );
+<*>.|\n			{
+					char msg[256];
+					snprintf(msg, sizeof(msg)/sizeof(msg[0]),
+						_("bad byte: %s (%02x)"),
+						yytext, (unsigned char)yytext[0]
+					);
+					format_synerr( "%s", msg );
+				}
 
 %%
 

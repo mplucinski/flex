@@ -43,6 +43,9 @@
 #define YY_FATAL_ERROR(msg) yy_fatal_error( msg )
 #endif
 
+#include <uchar.h>
+#define YY_CHAR char32_t
+
 #endif
 
 #ifndef FLEX_UTF8_NO_CONVERT
@@ -67,6 +70,12 @@ static size_t yycharset_convert_utf8 YYFARGS5(
         YY_CHAR*, target, size_t, target_length,
         size_t*, converted_bytes) {
     size_t i = 0, j = 0;
+
+#ifdef FLEX_UTF8_TRACE
+    fprintf(stderr, "Converting %d bytes\n", (int)source_bytes);
+    for(size_t iii = 0; iii < source_bytes; ++iii)
+        fprintf(stderr, "      %d: 0x%02x\n", (int)iii, (unsigned int)(unsigned char)source[iii]);
+#endif
 
     for(; i < source_bytes;) {
         if(j >= target_length)
@@ -103,8 +112,18 @@ static size_t yycharset_convert_utf8 YYFARGS5(
     if(converted_bytes)
         *converted_bytes = i;
 
+#ifdef FLEX_UTF8_TRACE
+    fprintf(stderr, "Outputted %d characters\n", (int)j);
+    for(size_t iii = 0; iii < j; ++iii)
+        fprintf(stderr, "      %d: 0x%08x\n", (int)iii, (unsigned int)target[iii]);
+#endif
+
     return j;
 }
+#endif
+
+#ifdef FLEX_UTF8_NO_SKELETON
+#undef YY_CHAR
 #endif
 
 #endif /* FLEX_UTF8_H */

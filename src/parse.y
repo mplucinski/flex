@@ -817,8 +817,14 @@ ccl		:  ccl CHAR '-' CHAR
 					    $2, $4);
 			  }
 
-			if ( $2 > $4 )
-				synerr( _("negative range in character class") );
+			if ( $2 > $4 ) {
+				char buffer[256];
+				snprintf(buffer, sizeof(buffer), "%s: 0x%08x - 0x%08x\n",
+					_("negative range in character class"),
+					(unsigned int)$2, (unsigned int)$4
+				);
+				synerr(buffer);
+			}
 
 			else
 				{
