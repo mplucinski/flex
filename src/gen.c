@@ -479,7 +479,30 @@ void genecs ()
 
 		numrows = csize / 8;
 
+		bool dots_written = false;
 		for (j = 0; j < numrows; ++j) {
+			bool same = true;
+			if(j == 0 || j == numrows-1)
+				same = false;
+			else {
+				for(i = j; i < csize; i = i + numrows) {
+					if(ecgroup[i] != ecgroup[i-1] ||
+							ecgroup[i] != ecgroup[i+1]) {
+						same = false;
+						break;
+					}
+				}
+			}
+
+			if(same) {
+				if(!dots_written)
+					fprintf(stderr, ".... (same values as above) ....\n");
+				dots_written = true;
+				continue;
+			}
+
+			dots_written = false;
+
 			for (i = j; i < csize; i = i + numrows) {
 				fprintf (stderr, "%4s = %-2d",
 					 readable_form (i), ecgroup[i]);
