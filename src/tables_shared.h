@@ -92,9 +92,9 @@ enum yytbl_id {
 /** bit flags for t_flags field of struct yytbl_data */
 enum yytbl_flags {
 	/* These first three are mutually exclusive */
-	YYTD_DATA8 = 0x01,   /**< data is an array of type flex_int8_t */
-	YYTD_DATA16 = 0x02,  /**< data is an array of type flex_int16_t */
-	YYTD_DATA32 = 0x04,  /**< data is an array of type flex_int32_t */
+	YYTD_DATA8 = 0x01,   /**< data is an array of type int8_t */
+	YYTD_DATA16 = 0x02,  /**< data is an array of type int16_t */
+	YYTD_DATA32 = 0x04,  /**< data is an array of type int32_t */
 
 	/* These two are mutually exclusive. */
 	YYTD_PTRANS = 0x08,  /**< data is a list of indexes of entries
@@ -105,20 +105,20 @@ enum yytbl_flags {
 
 /* The serialized tables header. */
 struct yytbl_hdr {
-	flex_uint32_t th_magic;  /**< Must be 0xF13C57B1 (comes from "Flex Table") */
-	flex_uint32_t th_hsize;  /**< Size of this header in bytes. */
-	flex_uint32_t th_ssize;  /**< Size of this dataset, in bytes, including header. */
-	flex_uint16_t th_flags;  /**< Currently unused, must be 0 */
+	uint32_t th_magic;  /**< Must be 0xF13C57B1 (comes from "Flex Table") */
+	uint32_t th_hsize;  /**< Size of this header in bytes. */
+	uint32_t th_ssize;  /**< Size of this dataset, in bytes, including header. */
+	uint16_t th_flags;  /**< Currently unused, must be 0 */
 	char   *th_version; /**< Flex version string. NUL terminated. */
 	char   *th_name;    /**< The name of this table set. NUL terminated. */
 };
 
 /** A single serialized table */
 struct yytbl_data {
-	flex_uint16_t td_id;      /**< enum yytbl_id table identifier */
-	flex_uint16_t td_flags;   /**< how to interpret this data */
-	flex_uint32_t td_hilen;   /**< num elements in highest dimension array */
-	flex_uint32_t td_lolen;   /**< num elements in lowest dimension array */
+	uint16_t td_id;      /**< enum yytbl_id table identifier */
+	uint16_t td_flags;   /**< how to interpret this data */
+	uint32_t td_hilen;   /**< num elements in highest dimension array */
+	uint32_t td_lolen;   /**< num elements in lowest dimension array */
 	void   *td_data;     /**< table data */
 };
 #endif
@@ -127,16 +127,16 @@ struct yytbl_data {
 #ifndef YYTDFLAGS2BYTES
 #define YYTDFLAGS2BYTES(td_flags)\
         (((td_flags) & YYTD_DATA8)\
-            ? sizeof(flex_int8_t)\
+            ? sizeof(int8_t)\
             :(((td_flags) & YYTD_DATA16)\
-                ? sizeof(flex_int16_t)\
-                :sizeof(flex_int32_t)))
+                ? sizeof(int16_t)\
+                :sizeof(int32_t)))
 #endif
 
 #ifdef FLEX_SCANNER
 %not-for-header
 #endif
-yyskel_static flex_int32_t yytbl_calc_total_len (const struct yytbl_data *tbl);
+yyskel_static int32_t yytbl_calc_total_len (const struct yytbl_data *tbl);
 #ifdef FLEX_SCANNER
 %ok-for-header
 #endif

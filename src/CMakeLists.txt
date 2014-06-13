@@ -21,7 +21,7 @@ include_directories("${CMAKE_SOURCE_DIR}/intl")
 # goal to generate skel.c
 add_custom_command(
 	OUTPUT skel.c
-	DEPENDS flex.skl mkskel.sh flexint.h tables_shared.h
+	DEPENDS flex.skl mkskel.sh tables_shared.h
 	COMMAND ${SED} 's/m4_/m4postproc_/g\; s/m4preproc_/m4_/g' ${CMAKE_CURRENT_SOURCE_DIR}/flex.skl | ${M4} -P -DFLEX_MAJOR_VERSION=`echo \"${FLEX_VERSION}\"|cut -f 1 -d .` -DFLEX_MINOR_VERSION=`echo \"${FLEX_VERSION}\"|cut -f 2 -d .` -DFLEX_SUBMINOR_VERSION=`echo \"${FLEX_VERSION}\"|cut -f 3 -d .` -I${CMAKE_CURRENT_SOURCE_DIR} | ${SED} 's/m4postproc_/m4_/g' | ${SHELL} ${CMAKE_CURRENT_SOURCE_DIR}/mkskel.sh  >skel.c
 )
 

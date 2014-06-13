@@ -94,7 +94,7 @@ char *alloca ();
 #ifdef HAVE_REGEX_H
 #include <regex.h>
 #endif
-#include "flexint.h"
+#include <stdint.h>
 
 /* We use gettext. So, when we write strings which should be translated, we mark them with _() */
 #ifdef ENABLE_NLS

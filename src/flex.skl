@@ -204,6 +204,7 @@ m4_ifdef( [[M4_YY_TABLES_EXTERNAL]],
 #include <string.h>
 #include <errno.h>
 #include <stdlib.h>
+#include <stdint.h>
 %endif
 
 %if-tables-serialization
@@ -212,9 +213,6 @@ m4_ifdef( [[M4_YY_TABLES_EXTERNAL]],
 %endif
 /* end standard C headers. */
 
-%if-c-or-c++
-m4preproc_include(`flexint.h')
-%endif
 
 %if-c++-only
 /* begin standard C++ headers. */
@@ -223,6 +221,7 @@ m4preproc_include(`flexint.h')
 #include <cstdlib>
 #include <cstdio>
 #include <cstring>
+#include <cstdint>
 /* end standard C++ headers. */
 %endif
 
@@ -277,7 +276,7 @@ m4_ifdef( [[M4_YY_NO_ANSI_FUNC_PROTOS]],
  * we want to instead treat it as an 8-bit unsigned char, hence the
  * double cast.
  */
-#define YY_SC_TO_UI(c) ((flex_uint32_t)(YY_CHAR)c)
+#define YY_SC_TO_UI(c) ((uint32_t)(YY_CHAR)c)
 %ok-for-header
 
 
@@ -1247,7 +1246,7 @@ static struct yytbl_dmap yydmap[] =
 /** A tables-reader object to maintain some state in the read. */
 struct yytbl_reader {
     FILE * fp; /**< input stream */
-    flex_uint32_t bread; /**< bytes read since beginning of current tableset */
+    uint32_t bread; /**< bytes read since beginning of current tableset */
 };
 
 %endif
@@ -3204,35 +3203,35 @@ m4preproc_include(`tables_shared.c')
 static int yytbl_read8 (void *v, struct yytbl_reader * rd)
 {
     errno = 0;
-    if (fread (v, sizeof (flex_uint8_t), 1, rd->fp) != 1){
+    if (fread (v, sizeof (uint8_t), 1, rd->fp) != 1){
         errno = EIO;
         return -1;
     }
-    rd->bread += sizeof(flex_uint8_t);
+    rd->bread += sizeof(uint8_t);
     return 0;
 }
 
 static int yytbl_read16 (void *v, struct yytbl_reader * rd)
 {
     errno = 0;
-    if (fread (v, sizeof (flex_uint16_t), 1, rd->fp) != 1){
+    if (fread (v, sizeof (uint16_t), 1, rd->fp) != 1){
         errno = EIO;
         return -1;
     }
-    *((flex_uint16_t *) v) = ntohs (*((flex_uint16_t *) v));
-    rd->bread += sizeof(flex_uint16_t);
+    *((uint16_t *) v) = ntohs (*((uint16_t *) v));
+    rd->bread += sizeof(uint16_t);
     return 0;
 }
 
 static int yytbl_read32 (void *v, struct yytbl_reader * rd)
 {
     errno = 0;
-    if (fread (v, sizeof (flex_uint32_t), 1, rd->fp) != 1){
+    if (fread (v, sizeof (uint32_t), 1, rd->fp) != 1){
         errno = EIO;
         return -1;
     }
-    *((flex_uint32_t *) v) = ntohl (*((flex_uint32_t *) v));
-    rd->bread += sizeof(flex_uint32_t);
+    *((uint32_t *) v) = ntohl (*((uint32_t *) v));
+    rd->bread += sizeof(uint32_t);
     return 0;
 }
 
@@ -3370,22 +3369,22 @@ static int yytbl_data_load YYFARGS2(struct yytbl_dmap *, dmap, struct yytbl_read
          * YYTD_STRUCT for the yy_transition array.
          */
         for (j = 0; j < inner_loop_count; j++, i++) {
-            flex_int32_t t32;
+            int32_t t32;
 
             /* read into t32 no matter what the real size is. */
             {
-            flex_int16_t t16;
-            flex_int8_t  t8;
+            int16_t t16;
+            int8_t  t8;
 
             switch (YYTDFLAGS2BYTES (td.td_flags)) {
-            case sizeof (flex_int32_t):
+            case sizeof (int32_t):
                 rv = yytbl_read32 (&t32, rd);
                 break;
-            case sizeof (flex_int16_t):
+            case sizeof (int16_t):
                 rv = yytbl_read16 (&t16, rd);
                 t32 = t16;
                 break;
-            case sizeof (flex_int8_t):
+            case sizeof (int8_t):
                 rv = yytbl_read8 (&t8, rd);
                 t32 = t8;
                 break;
@@ -3407,26 +3406,26 @@ static int yytbl_data_load YYFARGS2(struct yytbl_dmap *, dmap, struct yytbl_read
                     : &(((struct yy_trans_info *) p)->yy_nxt);
 
                 switch (dmap->dm_sz) {
-                case sizeof (flex_int32_t):
+                case sizeof (int32_t):
                     if (M4_YY_TABLES_VERIFY){
-                        if( ((flex_int32_t *) v)[0] != (flex_int32_t) t32)
-                           YY_FATAL_ERROR( "tables verification failed at YYTD_STRUCT flex_int32_t" );
+                        if( ((int32_t *) v)[0] != (int32_t) t32)
+                           YY_FATAL_ERROR( "tables verification failed at YYTD_STRUCT int32_t" );
                     }else
-                        ((flex_int32_t *) v)[0] = (flex_int32_t) t32;
+                        ((int32_t *) v)[0] = (int32_t) t32;
                     break;
-                case sizeof (flex_int16_t):
+                case sizeof (int16_t):
                     if (M4_YY_TABLES_VERIFY ){
-                        if(((flex_int16_t *) v)[0] != (flex_int16_t) t32)
-                        YY_FATAL_ERROR( "tables verification failed at YYTD_STRUCT flex_int16_t" );
+                        if(((int16_t *) v)[0] != (int16_t) t32)
+                        YY_FATAL_ERROR( "tables verification failed at YYTD_STRUCT int16_t" );
                     }else
-                        ((flex_int16_t *) v)[0] = (flex_int16_t) t32;
+                        ((int16_t *) v)[0] = (int16_t) t32;
                     break;
-                case sizeof(flex_int8_t):
+                case sizeof(int8_t):
                     if (M4_YY_TABLES_VERIFY ){
-                         if( ((flex_int8_t *) v)[0] != (flex_int8_t) t32)
-                        YY_FATAL_ERROR( "tables verification failed at YYTD_STRUCT flex_int8_t" );
+                         if( ((int8_t *) v)[0] != (int8_t) t32)
+                        YY_FATAL_ERROR( "tables verification failed at YYTD_STRUCT int8_t" );
                     }else
-                        ((flex_int8_t *) v)[0] = (flex_int8_t) t32;
+                        ((int8_t *) v)[0] = (int8_t) t32;
                     break;
                 default:
                     YY_FATAL_ERROR( "invalid dmap->dm_sz for struct" );   /* TODO: not fatal. */
@@ -3464,29 +3463,29 @@ static int yytbl_data_load YYFARGS2(struct yytbl_dmap *, dmap, struct yytbl_read
             else {
                 /* t32 is a plain int. copy data, then incrememnt p. */
                 switch (dmap->dm_sz) {
-                case sizeof (flex_int32_t):
+                case sizeof (int32_t):
                     if(M4_YY_TABLES_VERIFY ){
-                        if( ((flex_int32_t *) p)[0] != (flex_int32_t) t32)
-                        YY_FATAL_ERROR( "tables verification failed at flex_int32_t" );
+                        if( ((int32_t *) p)[0] != (int32_t) t32)
+                        YY_FATAL_ERROR( "tables verification failed at int32_t" );
                     }else
-                        ((flex_int32_t *) p)[0] = (flex_int32_t) t32;
-                    p = ((flex_int32_t *) p) + 1;
+                        ((int32_t *) p)[0] = (int32_t) t32;
+                    p = ((int32_t *) p) + 1;
                     break;
-                case sizeof (flex_int16_t):
+                case sizeof (int16_t):
                     if(M4_YY_TABLES_VERIFY ){
-                        if( ((flex_int16_t *) p)[0] != (flex_int16_t) t32)
-                        YY_FATAL_ERROR( "tables verification failed at flex_int16_t" );
+                        if( ((int16_t *) p)[0] != (int16_t) t32)
+                        YY_FATAL_ERROR( "tables verification failed at int16_t" );
                     }else
-                        ((flex_int16_t *) p)[0] = (flex_int16_t) t32;
-                    p = ((flex_int16_t *) p) + 1;
+                        ((int16_t *) p)[0] = (int16_t) t32;
+                    p = ((int16_t *) p) + 1;
                     break;
-                case sizeof (flex_int8_t):
+                case sizeof (int8_t):
                     if(M4_YY_TABLES_VERIFY ){
-                        if( ((flex_int8_t *) p)[0] != (flex_int8_t) t32)
-                        YY_FATAL_ERROR( "tables verification failed at flex_int8_t" );
+                        if( ((int8_t *) p)[0] != (int8_t) t32)
+                        YY_FATAL_ERROR( "tables verification failed at int8_t" );
                     }else
-                        ((flex_int8_t *) p)[0] = (flex_int8_t) t32;
-                    p = ((flex_int8_t *) p) + 1;
+                        ((int8_t *) p)[0] = (int8_t) t32;
+                    p = ((int8_t *) p) + 1;
                     break;
                 default:
                     YY_FATAL_ERROR( "invalid dmap->dm_sz for plain int" );   /* TODO: not fatal. */
@@ -3502,7 +3501,7 @@ static int yytbl_data_load YYFARGS2(struct yytbl_dmap *, dmap, struct yytbl_read
         int pad;
         pad = yypad64(rd->bread);
         while(--pad >= 0){
-            flex_int8_t t8;
+            int8_t t8;
             if(yytbl_read8(&t8,rd) != 0)
                 return -1;
         }
