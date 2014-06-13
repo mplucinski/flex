@@ -27,6 +27,8 @@
 #include <stdlib.h>
 #include "config.h"
 
+#define YY_NO_INPUT
+
 #define NUMBER 200
 #define WORD   201
 

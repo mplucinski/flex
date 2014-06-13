@@ -32,6 +32,7 @@
 #include <stdlib.h>
 #include "config.h"
 
+#define YY_NO_INPUT
 %}
 
 %option 8bit outfile="scanner.c" prefix="test"
@@ -82,6 +83,8 @@ main (argc, argv)
     int argc;
     char ** argv;
 {
+    (void)argv;
+
     if( argc > 1 )
         printf("%d\n", count_newlines(stdin));
 

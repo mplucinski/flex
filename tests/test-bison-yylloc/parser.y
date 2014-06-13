@@ -92,6 +92,8 @@ line:
 %%
 
 int yyerror(void* yylloc, void* scanner, char const* msg) {
+    (void)yylloc;
+    (void)scanner;
     fprintf(stderr,"%s\n",msg);
     return 0;
 }

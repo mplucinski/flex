@@ -37,6 +37,8 @@
 #include <stdlib.h>
 #include <config.h>
 
+#define YY_NO_INPUT
+
 #ifdef HAVE_PTHREAD_H
 #include <pthread.h>
 #endif
@@ -78,7 +80,7 @@ static int process_text(char* s, yyscan_t  scanner);
 <INITIAL,STATE_1,STATE_2>[[:space:]\r\n]+  { }
 %%
 
-int yywrap( yyscan_t  scanner) { return 1; }
+int yywrap( yyscan_t  scanner) { (void)scanner; return 1; }
 static int process_text(char* s, yyscan_t  scanner)
 {
     return (int)(*s) + (int) *(s + yyget_leng(scanner)-1);
@@ -88,6 +90,9 @@ int main(int ARGC, char *ARGV[]);
 
 #ifndef HAVE_LIBPTHREAD
   int main (int ARGC, char *ARGV[]) {
+    (void)ARGC;
+    (void)ARGV;
+
     printf(
        "TEST ABORTED because pthread library not available \n"
        "-- This is expected on some systems. It is not a flex error.\n" );

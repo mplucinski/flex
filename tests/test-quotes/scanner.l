@@ -40,6 +40,8 @@
 #include "config.h"
 /*#include "parser.h" */
 
+#define YY_NO_INPUT
+
 /* sect 1 block    [ 1 ]        TEST_XXX */
 /* sect 1 block   [[ 2 ]]       TEST_XXX */
 /* sect 1 block  [[[ 3 ]]]      TEST_XXX */

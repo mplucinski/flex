@@ -36,6 +36,8 @@
 #undef YY_BUF_SIZE
 #endif
 #define YY_BUF_SIZE 8
+#define YY_NO_INPUT
+#define YY_NO_TOP_STATE
 
 %}
 
@@ -87,6 +89,8 @@ static void dump_mem(FILE* fp){
 
 void * yyalloc(yy_size_t n , void* yyscanner)
 {
+    (void)yyscanner;
+
     void * p;
     int i;
 
@@ -116,6 +120,8 @@ void * yyalloc(yy_size_t n , void* yyscanner)
 
 void * yyrealloc(void* p, yy_size_t n , void* yyscanner)
 {
+    (void)yyscanner;
+
     int i;
     for (i=0; i < arrsz; i++)
         if ( ptrs[i].p == p){
@@ -137,6 +143,8 @@ void * yyrealloc(void* p, yy_size_t n , void* yyscanner)
 
 void yyfree(void* p , void* yyscanner)
 {
+    (void)yyscanner;
+
     int i;
     for (i=0; i < arrsz; i++)
         if ( ptrs[i].p == p){

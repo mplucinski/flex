@@ -32,6 +32,8 @@
 #include <stdlib.h>
 #include "config.h"
 
+#define YY_NO_INPUT
+
 #define NUM_TESTS 1
 char * tests[NUM_TESTS] =  { "ababab"};
 int main(void);

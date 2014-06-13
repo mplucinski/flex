@@ -33,6 +33,7 @@
 */
 %{
 #include "config.h"
+#define YY_NO_INPUT
 %}
 
 %option prefix="test" outfile="scanner.c" 

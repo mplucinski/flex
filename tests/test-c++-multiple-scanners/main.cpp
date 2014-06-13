@@ -34,6 +34,9 @@
 int
 main ( int argc, char** argv )
 {
+    (void)argc;
+    (void)argv;
+
     int S1_ok=1, S2_ok=1;
     S1_FlexLexer* S1 = new S1_FlexLexer;
     S2_FlexLexer* S2 = new S2_FlexLexer;

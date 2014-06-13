@@ -26,8 +26,10 @@
 int
 main ( int argc, char** argv )
 {
+    (void)argc;
+    (void)argv;
+
     yyscan_t  scanner;
-    FILE *fp;
     char * extra = "EXTRA";
     
     testlex_init(&scanner);
@@ -35,8 +37,8 @@ main ( int argc, char** argv )
     testset_out(stdout,scanner);    
     testset_extra(extra,scanner);
     
-    fp = testget_in(scanner);
-    fp = testget_out(scanner);
+    testget_in(scanner);
+    testget_out(scanner);
 
     while(testlex(scanner)) {
         char * text;

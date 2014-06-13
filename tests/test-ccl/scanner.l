@@ -30,6 +30,7 @@
 
 #define err_abort() do{printf("ERROR: flex line %d. input line %d.\n", __LINE__, yylineno); abort();} while(0)
 #define a_ok()      do{printf("OK: flex line %d. input line %d.\n", __LINE__, yylineno); return 1;}while(0)
+#define YY_NO_INPUT
 %}
 
 %option 8bit outfile="scanner.c" prefix="test"

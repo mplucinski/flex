@@ -36,6 +36,8 @@
 #undef YY_BUF_SIZE
 #endif
 #define YY_BUF_SIZE 8
+#define YY_NO_INPUT
+#define YY_NO_TOP_STATE
 
 %}
 

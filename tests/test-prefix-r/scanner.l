@@ -28,6 +28,7 @@
 #include <stdlib.h>
 #include "config.h"
 
+#define YY_NO_INPUT
 %}
 %option reentrant
 %option 8bit outfile="scanner.c" prefix="FOO"

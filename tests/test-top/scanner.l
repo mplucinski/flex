@@ -30,6 +30,8 @@
 #include <stdlib.h>
 #include "config.h"
 
+#define YY_NO_INPUT
+
 #ifndef DEFINE_ME
 #error "DEFINE_ME undefined!"
 #endif

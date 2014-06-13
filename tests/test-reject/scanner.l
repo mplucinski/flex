@@ -26,6 +26,7 @@
 #include <stdlib.h>
 #include "config.h"
 
+#define YY_NO_INPUT
 %}
 
 %option 8bit prefix="test"
@@ -43,7 +44,9 @@
 int main ( int argc, char** argv )
 {
     FILE* fp = NULL;
+#ifdef TEST_IS_REENTRANT
     void *yyscanner=0;
+#endif
     M4_YY_DECL_GUTS_VAR();
 
 #ifdef TEST_IS_REENTRANT
@@ -72,9 +75,6 @@ int main ( int argc, char** argv )
     yytables_destroy(M4_YY_CALL_ONLY_ARG);
 #endif
     yylex_destroy(M4_YY_CALL_ONLY_ARG);
-
-    if(argc < 0) /* silence the compiler */
-        yyscanner = (void*)fp;
 
     return 0;
 }

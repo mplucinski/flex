@@ -27,6 +27,7 @@
 #include <stdlib.h>
 #include "config.h"
 /*#include "parser.h" */
+#define YY_NO_INPUT
 
 %}
 

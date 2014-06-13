@@ -28,6 +28,7 @@
    We run diff on the input and output.
 */
 
+#define YY_NO_INPUT
 #include <stdio.h>
 #include <stdlib.h>
 #include "config.h"

@@ -32,6 +32,7 @@
 #include <stdlib.h>
 #include "config.h"
 
+#define YY_NO_INPUT
 
 /* We'll store the entire input in this buffer, growing as necessary. */
 struct Buffer {

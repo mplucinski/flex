@@ -29,6 +29,7 @@
 #include "config.h"
 static char* STRDUP(char* s1);
 #define YY_EXTRA_TYPE int
+#define YY_NO_INPUT
 %}
 
 %option 8bit outfile="scanner.c" prefix="test"

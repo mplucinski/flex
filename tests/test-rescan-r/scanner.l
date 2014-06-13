@@ -25,6 +25,7 @@
 /* A template scanner file to build "scanner.c". */
 #include <stdio.h>
 #include <stdlib.h>
+#define YY_NO_INPUT
 %}
 
 %option 8bit outfile="scanner.c" prefix="test"
@@ -48,6 +49,8 @@
 int
 main (int argc, char* const argv[])
 {
+    (void)argc;
+
     FILE* fp;
     int i;
     yyscan_t  yyscanner;

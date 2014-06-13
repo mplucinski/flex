@@ -26,7 +26,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "config.h"
-
+#define YY_NO_INPUT
 %}
 
 %option 8bit outfile="scanner.c" prefix="test"
