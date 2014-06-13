@@ -151,3 +151,8 @@ endforeach()
 
 add_executable(test_strutils test_strutils.c)
 add_test(test_strutils test_strutils)
+
+add_executable(test_utf8 test_utf8.c)
+add_test(NAME test_utf8
+    COMMAND ${SHELL} -c "./test_utf8 < ${CMAKE_CURRENT_SOURCE_DIR}/test-utf8.input | diff -a - ${CMAKE_CURRENT_SOURCE_DIR}/test-utf8.output"
+)
