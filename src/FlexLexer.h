@@ -110,7 +110,14 @@ protected:
 extern "C++" {
 
 class yyFlexLexer : public FlexLexer {
+
+    /* User-defined. Not touched by flex. */
+#ifdef YY_CXX_EXTRA_CODE
+	YY_CXX_EXTRA_CODE
+#endif
+
 public:
+
 	// arg_yyin and arg_yyout default to the cin and cout, but we
 	// only make that assignment when initializing in yylex().
 	yyFlexLexer( FLEX_STD istream* arg_yyin = 0, FLEX_STD ostream* arg_yyout = 0 );

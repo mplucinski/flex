@@ -65,7 +65,7 @@ int     action_size, defs1_offset, prolog_offset, action_offset,
 	action_index;
 char   *infilename = NULL, *outfilename = NULL, *headerfilename = NULL;
 int     did_outfilename;
-char   *prefix, *yyclass, *extra_type = NULL;
+char   *prefix, *yyclass, *extra_type = NULL, *cxx_extra_code = NULL;
 int     do_stdinit, use_stdout;
 int     onestate[ONE_STACK_SIZE], onesym[ONE_STACK_SIZE];
 int     onenext[ONE_STACK_SIZE], onedef[ONE_STACK_SIZE], onesp;
@@ -1650,6 +1650,9 @@ void readin ()
 	}
 
 	if (C_plus_plus) {
+		if(cxx_extra_code)
+			out_str ("\n#define YY_CXX_EXTRA_CODE %s\n", cxx_extra_code);
+
 		outn ("\n#include <FlexLexer.h>");
 
  		if (!do_yywrap) {
