@@ -32,6 +32,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "config.h"
+#include "scanner_char.h"
 #include "parser.h"
 #include "scanner.h"
 
@@ -44,7 +45,7 @@ extern int testget_lineno(void*);
 
 
 /* A dummy function. A check against seg-faults in yylval->str. */
-int process_text(char* s) {
+int process_text(YY_CHAR* s) {
     int total =0;
     while(*s) {
         total += (int) *s;
@@ -60,7 +61,7 @@ int process_text(char* s) {
 
 %union  {
     int  lineno;
-    char * str;
+    YY_CHAR * str;
 }
 %token <str> IDENT
 %token <lineno> LINENO

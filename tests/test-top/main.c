@@ -49,7 +49,7 @@ main ( int argc, char** argv )
     assert(fp == stdout);
 
     while(testlex(scanner)) {
-        char * text;
+        YY_CHAR * text;
         int line;
         line = testget_lineno(scanner);
         text = testget_text(scanner);

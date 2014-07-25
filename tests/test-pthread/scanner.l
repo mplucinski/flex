@@ -42,7 +42,7 @@
 #endif
 
 /* A naive test for segfaults when accessing yytext. */
-static int process_text(char* s, yyscan_t  scanner);
+static int process_text(YY_CHAR* s, yyscan_t  scanner);
 
 %}
 
@@ -82,7 +82,7 @@ int yywrap( yyscan_t  scanner) {
     (void)scanner;
     return 1;
 }
-static int process_text(char* s, yyscan_t  scanner)
+static int process_text(YY_CHAR* s, yyscan_t  scanner)
 {
     (void)scanner;
     return (int)(*s) + (int) *(s + yyget_leng(scanner)-1);
