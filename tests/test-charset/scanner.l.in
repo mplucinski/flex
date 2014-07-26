@@ -51,7 +51,7 @@ m4_ifdef(`VARIANT_CPLUSPLUS', `#define VARIANT_CPLUSPLUS 1', `')
 
 %}
 
-%option 8bit prefix="test" charset-source="ISO-8859-1"
+%option 8bit prefix="test"
 %option nounput nomain noinput noyywrap charset
 %option warn
 

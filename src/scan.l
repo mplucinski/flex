@@ -428,7 +428,6 @@ M4QEND      "]]"
 	header(-file)?      return OPT_HEADER;
 	header-char(-file)? return OPT_HEADER_CHAR;
 	tables-file         return OPT_TABLES;
-	charset-source      return OPT_CHARSET_SOURCE;
 	tables-verify   {
                     tablesverify = option_sense;
                     if(!tablesext && option_sense)

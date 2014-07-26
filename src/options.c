@@ -77,6 +77,8 @@ optspec_t flexopts[] = {
 	
 		{"-C[aefFmr]", OPT_COMPRESSION,
 	 "Specify degree of table compression (default is -Cem)"},
+	{"--charset-source=CHARSET", OPT_CHARSET_SOURCE, 0}
+	,
 	{"-+", OPT_CPLUSPLUS, 0}
 	,
 	{"--c++", OPT_CPLUSPLUS, 0}

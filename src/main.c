@@ -1474,6 +1474,10 @@ void flexinit (argc, argv)
 			break;
 		case OPT_HEX:
 			trace_hex = 1;
+			break;
+		case OPT_CHARSET_SOURCE:
+			charset_source = copy_string(arg);
+			break;
 		}		/* switch */
 	}			/* while scanopt() */
 

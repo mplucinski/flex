@@ -49,10 +49,10 @@ scanner-cxx.l: $(srcdir)/scanner.l.in
 	m4 -P -DVARIANT_CPLUSPLUS=1 $< > $@
 
 scanner-%.c: scanner-%.l
-	$(FLEX) -o $@ $<
+	$(FLEX) --charset-source=ISO-8859-1 -o $@ $<
 
 scanner.cpp: scanner-cxx.l
-	$(FLEX) -o $@ $<
+	$(FLEX) --charset-source=ISO-8859-1 -o $@ $<
 
 test-charset-%$(EXEEXT): scanner-%.c
 	$(CC) $(AM_CPPFLAGS) $(CPPFLAGS) $(CFLAGS) -o $@ $(LDFLAGS) $< $(LOADLIBES)
